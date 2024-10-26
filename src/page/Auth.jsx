@@ -1,17 +1,45 @@
+import { useState } from "react";
 import Input from "../component/Input"
+import axios from "axios";
+import { useEffect } from "react";
 
 export default function Auth() {
 
-    function handleSubmit(e) {
+    const [studentData, setStudentData] = useState([]);
+
+    useEffect(() => {
+        async function getData() {
+            const result = await axios.get(`https://learninghub-ij3c.onrender.com/hire`);
+            setStudentData(result.data)
+        }
+
+        getData()
+    })
+
+
+    async function handleSubmit(e) {
         e.preventDefault();
         const form = e.target;
         const formData = new FormData(form);
-        const data =Object.fromEntries(formData);
+        const data = Object.fromEntries(formData);
 
-        console.log(data);
-        
+        try {
+            const result = await axios.post(`https://learninghub-ij3c.onrender.com/hire`, data);
+            console.log(await result.data)
+        } catch (error) {
+            console.log(error)
+        }
+
         form.reset();
     }
+
+
+
+    // handle delect
+    async function handleDelect(id){
+        const result = await axios.delete(`https://learninghub-ij3c.onrender.com/hire/${id}`);
+        console.log(result)
+     }
 
     return (
         <div className="pt-28 container mx-auto  max-w-7xl  pb-20">
@@ -53,34 +81,43 @@ export default function Auth() {
             <div className="w-full px-4 py-8">
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
 
-                    <div className="p-6 transition-shadow duration-300 bg-white border rounded-lg shadow-lg hover:shadow-xl">
-                        <div className="flex items-center mb-4">
-                            <div className="bg-[#c9fd02] w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-xl mr-4" />
-                            <h3 className="text-xl font-semibold" />
-                        </div>
-                        <div className="space-y-2">
-                            <p>
-                                <strong>Role:</strong>{" "}
-                            </p>
-                            <p>
-                                <strong>Email:</strong>{" "}
-                            </p>
-                            <p>
-                                <strong>Phone Number:</strong>{" "}
-                            </p>
-                            <p>
-                                <strong>Course:</strong>{" "}
-                            </p>
-                            <p>
-                                <strong>Status:</strong> Unplaced
-                            </p>
-                        </div>
-                        <button
-                            className="w-full p-2 mt-4 text-white transition-colors bg-red-500 rounded hover:bg-red-600"
-                        >
-                            Delete
-                        </button>
-                    </div>
+                    {
+                        studentData.map((data) => {
+                            const { _id, status, role, phone, name, email, course } = data;
+
+
+                            return (
+                                <div key={_id} className="p-6 transition-shadow duration-300 bg-white border rounded-lg shadow-lg hover:shadow-xl">
+                                    <div className="flex items-center mb-4">
+                                        {/* <div className="bg-[#c9fd02] w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-xl mr-4" /> */}
+                                        <h3 className="text-xl font-semibold">{name} </h3>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <p>
+                                            <strong>Role:</strong>{role}
+                                        </p>
+                                        <p>
+                                            <strong>Email:</strong>{email}
+                                        </p>
+                                        <p>
+                                            <strong>Phone Number:</strong>{phone}
+                                        </p>
+                                        <p>
+                                            <strong>Course:</strong>{course}
+                                        </p>
+                                        <p>
+                                            <strong>Status:</strong> {status}
+                                        </p>
+                                    </div>
+                                    <button onClick={()=>handleDelect(_id)}
+                                        className="w-full p-2 mt-4 text-white transition-colors bg-red-500 rounded hover:bg-red-600"
+                                    >
+                                        Delete
+                                    </button>
+                                </div>
+                            )
+                        })
+                    }
 
                 </div>
             </div>

@@ -12,9 +12,51 @@ import medal from '../assets/logo/medal.svg';
 import through from '../assets/logo/thought.png';
 import training from '../assets/logo/training.png';
 import StudentReport from '../component/StudentReport';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+
 
 
 export default function Home() {
+
+    const [studentData, setStudentData] = useState([]);
+    const [placedStudent, SetPlacedStudent] = useState([]);
+    const [unplacedStudent, SetUnPlacedStudent] = useState([]);
+
+
+    async function getData() {
+        const result = await axios.get(`https://learninghub-ij3c.onrender.com/hire`);
+        setStudentData(result.data);
+
+    }
+
+    async function getPlaceStudent() {
+
+        const result = await axios.get(`https://learninghub-ij3c.onrender.com/hire/Placed`);
+        SetPlacedStudent(result.data.length)
+
+    }
+
+    async function getUnPlacestudent() {
+
+        const result = await axios.get(`https://learninghub-ij3c.onrender.com/hire/Unplaced`);
+        SetUnPlacedStudent(result.data.length)
+    }
+
+
+    useEffect(() => {
+        getData();
+        getPlaceStudent()
+        getUnPlacestudent()
+
+    }, [])
+
+
+
+
+
+
+
     return (
         <main className='text-white'>
 
@@ -92,9 +134,9 @@ export default function Home() {
                     <div className='mt-14 flex flex-col justify-center items-center gap-2  lg:w-2/5 '>
                         <p className='text-2xl'>Join our course with a proven track record of success, where learning isn&apos;t just about gaining skills; it&apos;s about growing them. Join us, learn with confidence, and watch your skills soar.</p>
                         <div className=' p-10 flex  justify-between gap-6'>
-                           <StudentReport studentlabel={'Total Students'}  value={'0'} />
-                           <StudentReport studentlabel={'Placed Students'}  value={'0'} />
-                           <StudentReport studentlabel={'Unplaced Students'}  value={'0'} />
+                            <StudentReport studentlabel={'Total Students'} value={studentData.length} />
+                            <StudentReport studentlabel={'Placed Students'} value={placedStudent} />
+                            <StudentReport studentlabel={'Unplaced Students'} value={unplacedStudent} />
                         </div>
                     </div>
                 </section>
