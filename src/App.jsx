@@ -8,7 +8,7 @@ function App() {
 
   return (
     <>
-      <div className= ' bg-black w-screen h-max '>
+      <div className= ' bg-black w-screen h-max  overflow-hidden'>
         <div className="container mx-auto text-white   max-w-7xl ">
           <Header />
         </div>

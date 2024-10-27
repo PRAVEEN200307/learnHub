@@ -2,7 +2,7 @@ import { Link } from "react-router-dom"
 
 export default function Header() {
    return (
-      <header className=" p-3 mx-auto  rounded-3xl fixed top-5 right-7 left-7 sm:right-36 sm:left-24  border-2  z-10 bg-black">
+      <header className=" p-3 mx-auto  rounded-3xl fixed top-5   right-12 left-4 sm:right-36 sm:left-24  border-2  z-10 bg-black">
          <div className=" flex justify-between items-center  ">
             <h1 className="font-bold text-2xl text-lime-400">
                <Link to={'/'}> LearnHub</Link>
